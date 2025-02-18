@@ -36,7 +36,6 @@ const saveDomain = async (domain) => {
  * Get access token from HubSpot
  */
 const refreshAccessToken = async (domain, hubId) => {
-  console.log("refresh access token");
   const { HUBSPOT_CID, HUBSPOT_CS } = process.env;
   const account = domain.integrations.hubspot.accounts.find(
     (account) => account.hubId === hubId
@@ -54,7 +53,6 @@ const refreshAccessToken = async (domain, hubId) => {
         HUBSPOT_CS,
         refreshToken
       );
-      console.log("refresh access token success");
       const body = result.body ? result.body : result;
 
       const newAccessToken = body.accessToken;
@@ -65,7 +63,6 @@ const refreshAccessToken = async (domain, hubId) => {
         account.accessToken = newAccessToken;
       }
 
-      console.log("new access token set to client");
       return true;
     } catch (err) {
       console.log("refresh access token error", err);
@@ -315,7 +312,6 @@ const processMeetings = (domain, hubId, q) => {
 
 const createQueue = (domain, actions) =>
   queue(async (action, callback) => {
-    console.log('Handle queue action:', action);
     actions.push(action);
 
     if (actions.length > 2000) {
@@ -354,7 +350,6 @@ const pullDataFromHubspot = async () => {
 
     try {
       await refreshAccessToken(domain, account.hubId);
-      console.log("refresh access token");
     } catch (err) {
       console.log(err, {
         apiKey: domain.apiKey,
