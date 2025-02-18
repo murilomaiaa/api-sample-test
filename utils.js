@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const Action = require('./Action');
+
 const disallowedValues = [
   '[not provided]',
   'placeholder',
@@ -22,9 +25,14 @@ const filterNullValuesFromObject = object =>
 
 const normalizePropertyName = key => key.toLowerCase().replace(/__c$/, '').replace(/^_+|_+$/g, '').replace(/_+/g, '_');
 
-const goal = actions => {
-  // this is where the data will be written to the database
-  console.log(actions);
+const goal = async (actions) => {
+  try {
+    console.log(`Inserting ${actions.length} actions into database`);
+    await Action.insertMany(actions);
+    console.log('Actions saved to database');
+  } catch (error) {
+    console.error('Error saving actions to database:', error);
+  }
 };
 
 module.exports = {
